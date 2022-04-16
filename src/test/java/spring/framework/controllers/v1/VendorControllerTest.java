@@ -61,6 +61,7 @@ class VendorControllerTest {
         when(vendorService.getAllVendors()).thenReturn(new VendorListDTO(Arrays.asList(vendor1, vendor2)));
 
         mockMvc.perform(get(VendorController.BASE_URL)
+                .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.vendors", hasSize(2)));
@@ -78,8 +79,9 @@ class VendorControllerTest {
         when(vendorService.createNewVendor(vendor)).thenReturn(returnDTO);
 
         mockMvc.perform(post(VendorController.BASE_URL + "/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(vendor)))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(vendor)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", equalTo("John")))
                 .andExpect(jsonPath("$.vendor_url", equalTo(VendorController.BASE_URL + "/1")));
@@ -88,6 +90,7 @@ class VendorControllerTest {
     @Test
     void deleteVendorById() throws Exception {
         mockMvc.perform(delete(VendorController.BASE_URL + "/1")
+                .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -103,6 +106,7 @@ class VendorControllerTest {
         when(vendorService.getVendorById(anyLong())).thenReturn(vendor);
 
         mockMvc.perform(get(VendorController.BASE_URL + "/1")
+                .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo("John")));
@@ -120,8 +124,9 @@ class VendorControllerTest {
         when(vendorService.patchVendor(anyLong(), any(VendorDTO.class))).thenReturn(returnDTO);
 
         mockMvc.perform(patch(VendorController.BASE_URL + "/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(vendor)))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(vendor)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo("Michael")))
                 .andExpect(jsonPath("$.vendor_url", equalTo(VendorController.BASE_URL + "/1")));
@@ -135,6 +140,7 @@ class VendorControllerTest {
         given(vendorService.saveVendorByVendorDTO(anyLong(), any(VendorDTO.class))).willReturn(returnDTO);
 
         mockMvc.perform(put(VendorController.BASE_URL + "/1")
+                .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(returnDTO)))
                 .andExpect(status().isOk())
@@ -146,7 +152,8 @@ class VendorControllerTest {
         when(vendorService.getVendorById(anyLong())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(get(VendorController.BASE_URL + "/222")
-                        .contentType(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 }

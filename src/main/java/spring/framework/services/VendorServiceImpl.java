@@ -81,7 +81,7 @@ public class VendorServiceImpl implements VendorService {
             if (vendorDTO.getName() != null) {
                 vendor.setName(vendorDTO.getName());
             }
-            return vendorDTO;
+            return savedAndReturnDTO(vendor);
         }).orElseThrow(ResourceNotFoundException::new);
     }
 
